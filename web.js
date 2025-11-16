@@ -19,8 +19,7 @@ const BananaGPT = () => {
   const [settings, setSettings] = useState({
     temperature: 0.7,
     maxTokens: 4000,
-    theme: 'light',
-    apiKey: ''
+    theme: 'light'
   });
   
   const messagesEndRef = useRef(null);
@@ -180,23 +179,15 @@ const BananaGPT = () => {
     setIsLoading(true);
 
     try {
-      if (!settings.apiKey) {
-        alert('Please set your Anthropic API key in settings.');
-        setIsLoading(false);
-        return;
-      }
-
       const systemPrompt = 'You are BnanaB, a highly intelligent and helpful AI assistant. You are expert at everything including coding, writing, problem-solving, and general knowledge. You provide clear, accurate, and detailed responses. When writing code, always provide complete, working solutions with proper explanations.';
 
       const response = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': settings.apiKey,
-          'anthropic-version': '2023-06-01'
         },
         body: JSON.stringify({
-          model: 'claude-3-5-sonnet-20241022',
+          model: 'claude-sonnet-4-20250514',
           max_tokens: settings.maxTokens,
           temperature: settings.temperature,
           system: systemPrompt,
@@ -440,21 +431,6 @@ const BananaGPT = () => {
                 onChange={(e) => setSettings({ ...settings, maxTokens: parseInt(e.target.value) })}
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
               />
-            </div>
-
-            <div>
-              <label className="flex items-center text-gray-700 mb-2 font-semibold">
-                <Lock size={18} className="mr-2" />
-                Anthropic API Key
-              </label>
-              <input
-                type="password"
-                value={settings.apiKey}
-                onChange={(e) => setSettings({ ...settings, apiKey: e.target.value })}
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                placeholder="sk-ant-..."
-              />
-              <p className="text-xs text-gray-500 mt-1">Required for AI responses. Get from Anthropic dashboard.</p>
             </div>
 
             <div>
